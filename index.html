@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kiểm tra giữa học kỳ I - Hóa học 12</title>
+<style>
+body{font-family:Arial,sans-serif;background:#f4f7fb;color:#18212f;margin:0;line-height:1.5}
+.wrap{max-width:980px;margin:auto;padding:20px}
+header{background:linear-gradient(135deg,#173d8f,#2e65d4);color:#fff;padding:24px;border-radius:18px}
+h1{text-align:center;font-size:26px}
+.meta{display:grid;grid-template-columns:2fr 1fr 1fr;gap:10px}.meta input{padding:10px;border-radius:8px;border:0}
+.card{background:#fff;margin:18px 0;padding:20px;border-radius:14px;border:1px solid #d7deea}
+.q{padding:14px 0;border-top:1px dashed #d5dbe5}.q:first-child{border-top:0}
+.opt{display:block;padding:6px}
+.tf{display:grid;grid-template-columns:1fr 70px 70px;gap:6px;align-items:center}
+input[type=text]{padding:9px;border:1px solid #bbb;border-radius:8px;max-width:360px;width:100%}
+.actions{position:sticky;bottom:0;background:#f4f7fbdd;padding:12px;text-align:center}
+button{padding:11px 18px;border:0;border-radius:9px;font-weight:bold;cursor:pointer;margin:4px}
+.primary{background:#2457c5;color:#fff}.secondary{background:#fff;border:1px solid #aaa}
+.result{display:none;background:#fff;border:2px solid #9db2e8;border-radius:14px;padding:18px;margin:18px 0}
+.correct{background:#ecfdf3}.wrong{background:#fff1f0}.ex{display:none;margin-top:8px;font-size:14px;color:#344054}
+@media(max-width:700px){.meta{grid-template-columns:1fr}.tf{grid-template-columns:1fr 55px 55px}}
+</style>
+</head>
+<body><div class="wrap">
+<header>
+<div><b>TRƯỜNG THPT LÊ HỒNG PHONG</b></div><div><b>TỔ: HÓA HỌC</b></div>
+<h1>ĐỀ KIỂM TRA GIỮA HỌC KỲ I - HÓA HỌC 12</h1>
+<p style="text-align:center">Chương trình GDPT 2018 - Năm học 2026 - 2027</p>
+<div class="meta"><input placeholder="Họ và tên học sinh"><input placeholder="Lớp"><input placeholder="Số báo danh"></div>
+</header>
+<div id="quiz"></div>
+<div class="result" id="result"><h2>KẾT QUẢ: <span id="score">0.00</span>/10</h2><div id="msg"></div></div>
+<div class="actions"><button class="secondary" onclick="window.print()">In đề</button><button class="secondary" onclick="resetQuiz()">Làm lại</button><button class="primary" onclick="submitQuiz()">Nộp bài & chấm điểm</button></div>
+</div>
+<script>
+const mcq=[
+["Chất nào sau đây là ester?",["CH3COOH","CH3COOCH3","C2H5OH","CH3CHO"],1],
+["Tên gọi của CH3COOC2H5 là",["ethyl acetate","methyl acetate","ethyl formate","methyl propionate"],0],
+["Chất béo là",["triester của glycerol với acid béo","monoester của alcohol với acid béo","hợp chất chứa nhóm amino","polymer của glucose"],0],
+["Khi thủy phân ethyl acetate trong dung dịch NaOH, sản phẩm hữu cơ thu được là",["CH3COOH và C2H5OH","CH3COONa và C2H5OH","CH3OH và C2H5COONa","CH3COONa và CH3OH"],1],
+["Hydrogen hóa hoàn toàn triolein (Ni, đun nóng) làm",["tăng số liên kết đôi C=C","chuyển chất béo không no thành chất béo no","tạo glycerol trực tiếp","tạo xà phòng"],1],
+["Thành phần chính của xà phòng thường là",["muối sodium/potassium của acid béo","ester của glycerol","hydrocarbon thơm","muối chloride của kim loại kiềm"],0],
+["Carbohydrate nào sau đây là monosaccharide?",["Saccharose","Maltose","Glucose","Tinh bột"],2],
+["Chất nào sau đây thuộc disaccharide?",["Glucose","Fructose","Saccharose","Cellulose"],2],
+["Thuốc thử thường dùng để nhận biết hồ tinh bột là",["nước bromine","dung dịch iodine","thuốc thử Tollens","dung dịch NaCl"],1],
+["Cho 498,4 gam chất béo trung tính xà phòng hóa vừa đủ với 840 mL dung dịch NaOH 2 M. Khối lượng xà phòng thu được là",["529,46 gam","562,14 gam","514,08 gam","524,68 gam"],2],
+["Chất nào sau đây là amine bậc một?",["(CH3)2NH","CH3NH2","(CH3)3N","C6H5NHCH3"],1],
+["Tên thông thường của C6H5NH2 là",["methylamine","ethylamine","aniline","glycine"],2],
+["Nhóm chức đặc trưng đồng thời có trong amino acid đơn chức điển hình là",["-OH và -CHO","-NH2 và -COOH","-COO- và -OH","-NH2 và -CHO"],1],
+["Peptide được tạo thành từ các đơn vị",["alpha-amino acid","monosaccharide","acid béo","alkene"],0],
+["Phản ứng màu biuret đặc trưng cho chất có",["ít nhất hai liên kết peptide","một nhóm -COOH","một liên kết đôi C=C","nhóm -CHO"],0],
+["Cho ester hai chức, mạch hở X (C9H14O4) tác dụng với dư NaOH, đun nóng, thu được alcohol Y (no, hai chức) và hai muối của hai carboxylic acid Z và T (MZ < MT). Y không hòa tan Cu(OH)2 trong môi trường kiềm. Hydrogen hóa hoàn toàn Z thu được T. Các phát biểu: (1) Acid Z có đồng phân hình học; (2) Có 2 CTCT của X; (3) a mol Y + Na dư thu được a mol H2; (4) M acid T = 74 g/mol. Số phát biểu đúng là",["1","2","3","4"],1],
+["Cho aniline tác dụng với nước bromine, hiện tượng đặc trưng là",["không có hiện tượng","xuất hiện kết tủa trắng","có khí không màu thoát ra","xuất hiện kết tủa xanh"],1],
+["Tính lưỡng tính của amino acid được thể hiện vì amino acid có thể phản ứng với",["chỉ acid","chỉ base","cả acid và base","chỉ alcohol"],2]
+];
+const tf=[
+["Xét thí nghiệm xà phòng hóa chất béo bằng dung dịch NaOH, đun nóng.",[["Sản phẩm hữu cơ luôn có glycerol.",true],["Muối sodium của acid béo là thành phần chính của xà phòng.",true],["Thêm dung dịch NaCl bão hòa có thể giúp tách xà phòng.",true],["Phản ứng này là phản ứng hydrogen hóa chất béo.",false]]],
+["Về glucose, fructose và saccharose.",[["Glucose và fructose đều là monosaccharide.",true],["Saccharose là disaccharide.",true],["Saccharose có phản ứng tráng bạc trực tiếp.",false],["Glucose có thể lên men tạo ethanol.",true]]],
+["Một học sinh thực hiện các thí nghiệm với tinh bột và cellulose.",[["Hồ tinh bột tạo màu xanh tím với iodine.",true],["Thủy phân hoàn toàn tinh bột thu được glucose.",true],["Cellulose phản ứng với HNO3 trong điều kiện thích hợp tạo cellulose nitrate.",true],["Cellulose và tinh bột có cấu trúc phân tử hoàn toàn giống nhau.",false]]],
+["Xét methylamine, aniline, amino acid và peptide.",[["Methylamine phản ứng với HCl tạo muối.",true],["Aniline làm mất màu nước bromine và tạo kết tủa trắng.",true],["Glycine có thể phản ứng với cả HCl và NaOH.",true],["Dipeptide luôn cho phản ứng màu biuret rõ rệt.",false]]]
+];
+const shortQ=[
+["Xà phòng hóa hoàn toàn 0,10 mol ethyl acetate bằng NaOH. Số mol NaOH tối thiểu cần dùng là bao nhiêu?",["0.1"]],
+["Một triglyceride có 3 liên kết đôi C=C trong các gốc acid béo. Hydrogen hóa hoàn toàn 0,20 mol triglyceride cần bao nhiêu mol H2?",["0.6"]],
+["Thủy phân hoàn toàn 0,25 mol saccharose thu được tổng cộng bao nhiêu mol monosaccharide?",["0.5"]],
+["Để sản xuất ethanol, người ta lên men m kg gạo chứa 85% tinh bột, thu được 50 lít dung dịch C2H5OH 46°. Biết D(C2H5OH)=0,789 g/mL và hiệu suất cả quá trình 70%. Giá trị m bằng bao nhiêu kg? (làm tròn 1 chữ số thập phân)",["53.7"]],
+["Cho 0,20 mol methylamine CH3NH2 phản ứng vừa đủ với HCl. Số mol HCl cần dùng là bao nhiêu?",["0.2"]],
+["Một tripeptide mạch hở được tạo từ 3 gốc alpha-amino acid. Phân tử tripeptide có bao nhiêu liên kết peptide?",["2"]]
+];
+function norm(s){s=(s||"").trim().toLowerCase().replace(/,/g,".").replace(/mol|kg/g,"").replace(/\s/g,"");const n=Number(s);return Number.isFinite(n)?String(n):s}
+function render(){
+let h='<section class="card"><h2>PHẦN I. TRẮC NGHIỆM NHIỀU LỰA CHỌN (4,5 điểm)</h2>';
+mcq.forEach((x,i)=>{h+=`<div class="q" id="m${i}"><b>Câu ${i+1}. ${x[0]}</b>`;x[1].forEach((o,j)=>h+=`<label class="opt"><input type="radio" name="m${i}" value="${j}"> ${"ABCD"[j]}. ${o}</label>`);h+=`<div class="ex">Đáp án: ${"ABCD"[x[2]]}</div></div>`});h+='</section>';
+h+='<section class="card"><h2>PHẦN II. ĐÚNG / SAI (4,0 điểm)</h2>';
+tf.forEach((x,i)=>{h+=`<div class="q" id="t${i}"><b>Câu ${i+1}. ${x[0]}</b><div class="tf"><div></div><b>Đúng</b><b>Sai</b>`;x[1].forEach((s,j)=>h+=`<div>${"abcd"[j]}) ${s[0]}</div><div><input type="radio" name="t${i}_${j}" value="true"></div><div><input type="radio" name="t${i}_${j}" value="false"></div>`);h+='</div></div>'});h+='</section>';
+h+='<section class="card"><h2>PHẦN III. TRẢ LỜI NGẮN (1,5 điểm)</h2>';
+shortQ.forEach((x,i)=>h+=`<div class="q" id="sbox${i}"><b>Câu ${i+1}. ${x[0]}</b><br><input type="text" id="s${i}" placeholder="Nhập đáp án"><div class="ex">Đáp án: ${x[1][0].replace(".",",")}</div></div>`);h+='</section>';document.getElementById("quiz").innerHTML=h}
+function submitQuiz(){let p=0,answered=0;document.querySelectorAll(".q").forEach(e=>e.classList.remove("correct","wrong"));document.querySelectorAll(".ex").forEach(e=>e.style.display="block");
+mcq.forEach((x,i)=>{const e=document.querySelector(`input[name=m${i}]:checked`);if(e){answered++;if(+e.value===x[2]){p+=.25;document.getElementById("m"+i).classList.add("correct")}else document.getElementById("m"+i).classList.add("wrong")}else document.getElementById("m"+i).classList.add("wrong")});
+tf.forEach((x,i)=>{let n=0;x[1].forEach((s,j)=>{const e=document.querySelector(`input[name=t${i}_${j}]:checked`);if(e){answered++;if((e.value==="true")===s[1])n++}});p+=n*.25;document.getElementById("t"+i).classList.add(n===4?"correct":"wrong")});
+shortQ.forEach((x,i)=>{const v=document.getElementById("s"+i).value;if(v.trim())answered++;if(x[1].map(norm).includes(norm(v))){p+=.25;document.getElementById("sbox"+i).classList.add("correct")}else document.getElementById("sbox"+i).classList.add("wrong")});
+document.getElementById("score").textContent=p.toFixed(2);document.getElementById("msg").textContent=`Đã trả lời ${answered}/40 lệnh hỏi.`;document.getElementById("result").style.display="block";document.getElementById("result").scrollIntoView({behavior:"smooth"})}
+function resetQuiz(){document.querySelectorAll("input").forEach(x=>{if(x.type==="radio")x.checked=false;else x.value=""});document.getElementById("result").style.display="none";document.querySelectorAll(".ex").forEach(e=>e.style.display="none");document.querySelectorAll(".q").forEach(e=>e.classList.remove("correct","wrong"))}
+render();
+</script></body></html>
