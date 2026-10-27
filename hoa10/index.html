@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Đề kiểm tra giữa học kỳ I - Hóa học 10 nâng cao</title>
+<style>
+:root{
+  --blue:#174ea6; --blue2:#0b2f6b; --bg:#f4f7fb; --card:#fff;
+  --text:#182230; --muted:#667085; --line:#d7deea; --ok:#eaf8ef; --bad:#fff0f0;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text);line-height:1.55}
+.wrap{max-width:1050px;margin:auto;padding:22px 16px 80px}
+.hero{background:linear-gradient(135deg,#143f91,#2865d6);color:#fff;border-radius:18px;padding:26px;box-shadow:0 12px 28px rgba(20,63,145,.18)}
+.school{font-weight:800}.team{font-weight:700;margin-top:3px}
+h1{text-align:center;font-size:28px;margin:18px 0 4px}.sub{text-align:center;opacity:.95}
+.info{display:grid;grid-template-columns:2fr 1fr 1fr;gap:10px;margin-top:18px}
+.info input{padding:11px;border:0;border-radius:9px;font-size:14px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:16px 0}
+.stat{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px;text-align:center}
+.stat b{display:block;color:var(--blue2);font-size:18px}
+.section{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px;margin:18px 0;box-shadow:0 5px 16px rgba(16,24,40,.05)}
+.section h2{color:var(--blue2);margin:0 0 5px;font-size:21px}
+.note{color:var(--muted);font-size:14px;margin-bottom:12px}
+.q{padding:17px 0;border-top:1px dashed #d9dfeb}
+.q:first-of-type{border-top:0}
+.qt{font-weight:700;margin-bottom:9px}
+.opt{display:block;padding:8px 10px;border-radius:8px;cursor:pointer}
+.opt:hover{background:#f6f8fc}
+.opt input{margin-right:8px}
+.tf-grid{display:grid;grid-template-columns:1fr 80px 80px;gap:7px;align-items:center}
+.tf-h{font-weight:700;text-align:center;color:var(--muted);font-size:13px}
+.tf-st{padding:9px 0;border-top:1px solid #edf1f6}
+.tf-c{text-align:center}
+.short{width:min(430px,100%);padding:10px 12px;border:1px solid #b9c3d4;border-radius:9px;font-size:15px}
+.explain{display:none;margin-top:9px;padding:10px 12px;border-left:4px solid #8aa4df;background:#f7f9fd;font-size:14px;color:#344054}
+.correct{background:var(--ok)!important}
+.wrong{background:var(--bad)!important}
+.result{display:none;background:#fff;border:2px solid #a8b9e6;border-radius:16px;padding:22px;margin:20px 0}
+.score{font-size:38px;font-weight:800;color:var(--blue2)}
+.subscore{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+.subscore div{border:1px solid var(--line);border-radius:10px;padding:10px}
+.actions{position:sticky;bottom:0;background:rgba(244,247,251,.96);backdrop-filter:blur(7px);padding:12px 0;border-top:1px solid var(--line);display:flex;justify-content:center;gap:10px}
+button{border:0;border-radius:10px;padding:12px 20px;font-weight:700;font-size:15px;cursor:pointer}
+.primary{background:var(--blue);color:#fff}.secondary{background:#fff;border:1px solid #bac4d4;color:#27364b}
+.footer{text-align:center;color:var(--muted);font-size:13px;margin-top:18px}
+@media(max-width:700px){.info,.stats,.subscore{grid-template-columns:1fr}.tf-grid{grid-template-columns:1fr 62px 62px}h1{font-size:22px}}
+@media print{body{background:#fff}.actions,.result{display:none!important}.section,.hero{box-shadow:none}.wrap{max-width:none;padding:0}.hero{background:#fff;color:#000;border:1px solid #999}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="hero">
+  <div class="school">TRƯỜNG THPT LÊ HỒNG PHONG</div>
+  <div class="team">TỔ: HÓA HỌC</div>
+  <h1>ĐỀ KIỂM TRA GIỮA HỌC KỲ I - HÓA HỌC 10</h1>
+  <div class="sub">Năm học 2026 - 2027 • Thời gian làm bài: 45 phút</div>
+  <div class="info">
+    <input id="name" placeholder="Họ và tên học sinh">
+    <input id="class" placeholder="Lớp">
+    <input id="sbd" placeholder="Số báo danh (nếu có)">
+  </div>
+</div>
+
+<div class="stats">
+  <div class="stat"><b>18 câu</b>Nhiều lựa chọn</div>
+  <div class="stat"><b>4 câu</b>Đúng / Sai</div>
+  <div class="stat"><b>6 câu</b>Trả lời ngắn</div>
+  <div class="stat"><b>10 điểm</b>Tổng điểm</div>
+</div>
+
+<form id="quiz"></form>
+
+<div id="result" class="result">
+  <div>KẾT QUẢ</div>
+  <div class="score"><span id="score">0.00</span>/10</div>
+  <div id="msg"></div>
+  <div class="subscore">
+    <div>Phần I: <b id="s1">0.00</b>/4.50</div>
+    <div>Phần II: <b id="s2">0.00</b>/4.00</div>
+    <div>Phần III: <b id="s3">0.00</b>/1.50</div>
+  </div>
+</div>
+
+<div class="actions">
+  <button type="button" class="secondary" onclick="window.print()">In đề</button>
+  <button type="button" class="secondary" onclick="resetQuiz()">Làm lại</button>
+  <button type="button" class="primary" onclick="submitQuiz()">Nộp bài & chấm điểm</button>
+</div>
+
+<div class="footer">Không kiểm tra nội dung chuyên đề.</div>
+</div>
+
+<script>
+const mcq = [
+{q:"Nguyên tử X có tổng số hạt proton, neutron và electron bằng 82. Trong đó số hạt mang điện nhiều hơn số hạt không mang điện là 22. Số khối của X là",o:["54","55","56","57"],a:2,e:"2Z+N=82; 2Z-N=22 ⇒ Z=26, N=30 ⇒ A=56."},
+{q:"Nguyên tố X có hai đồng vị bền. Đồng vị thứ nhất có số khối 10, chiếm 20%; đồng vị thứ hai có số khối 11. Nguyên tử khối trung bình của X bằng",o:["10,2","10,5","10,8","10,9"],a:2,e:"Ā=10×0,20+11×0,80=10,8."},
+{q:"Một nguyên tử có 17 proton, 18 neutron và 17 electron. Kí hiệu nguyên tử phù hợp là",o:["³⁵₁₇X","³⁴₁₇X","³⁵₁₈X","³⁶₁₇X"],a:0,e:"A=17+18=35, Z=17."},
+{q:"Nguyên tử X có tổng số electron ở các phân lớp s là 6 và tổng số electron ở các phân lớp p là 7. Số hiệu nguyên tử của X là",o:["13","14","15","16"],a:0,e:"1s²2s²3s² có 6e ở s; 2p⁶3p¹ có 7e ở p ⇒ tổng 13e."},
+{q:"Cấu hình electron nào sau đây không thể là cấu hình trạng thái cơ bản của nguyên tử trung hòa?",o:["1s²2s²2p⁶3s²","1s²2s²2p⁶3s²3p³","1s²2s²2p⁶3s¹3p¹","1s²2s²2p⁵"],a:2,e:"Theo nguyên lí vững bền, 3s phải được điền đủ trước 3p trong trạng thái cơ bản."},
+{q:"Nguyên tử X có 3 lớp electron và có đúng 3 electron độc thân ở trạng thái cơ bản. X là",o:["Al","Si","P","S"],a:2,e:"P: [Ne]3s²3p³ có 3 electron độc thân."},
+{q:"Nguyên tố X có cấu hình electron lớp ngoài cùng ns²np⁴. Phát biểu nào sau đây đúng?",o:["X luôn là kim loại","X thuộc nhóm IVA","X thuộc nhóm VIA và có 6 electron hóa trị","X thuộc nhóm VIIA"],a:2,e:"ns²np⁴ có 6 electron hóa trị ⇒ nhóm VIA (16)."},
+{q:"Nguyên tố X thuộc chu kì 3, nhóm IIIA. Nguyên tố Y cùng chu kì, có độ âm điện lớn hơn X nhưng nhỏ hơn Cl. Y có thể là",o:["Na","Mg","Si","Ar"],a:2,e:"X là Al. Trong chu kì 3, độ âm điện tăng dần; Si nằm giữa Al và Cl."},
+{q:"Cho các nguyên tố có Z = 11, 12, 13, 14. Dãy bán kính nguyên tử giảm dần là",o:["11 > 12 > 13 > 14","14 > 13 > 12 > 11","12 > 11 > 13 > 14","11 > 13 > 12 > 14"],a:0,e:"Cùng chu kì 3, bán kính giảm từ trái sang phải."},
+{q:"Trong các nguyên tố Mg, Al, Si, P, nguyên tố có tính phi kim mạnh nhất là",o:["Mg","Al","Si","P"],a:3,e:"Trong một chu kì, tính phi kim tăng từ trái sang phải."},
+{q:"Nguyên tố X thuộc chu kì 3, oxide cao nhất có công thức XO₂. X là",o:["Al","Si","P","S"],a:1,e:"XO₂ ứng với số oxi hóa +4 ⇒ nhóm IVA; chu kì 3 ⇒ Si."},
+{q:"Oxide nào sau đây phản ứng được với cả HCl và NaOH?",o:["Na₂O","MgO","Al₂O₃","SO₃"],a:2,e:"Al₂O₃ là oxide lưỡng tính."},
+{q:"Cho các oxide Na₂O, MgO, Al₂O₃, SiO₂. Số oxide có thể phản ứng với dung dịch NaOH là",o:["1","2","3","4"],a:1,e:"Al₂O₃ và SiO₂ phản ứng với NaOH; Na₂O, MgO không."},
+{q:"Cho các hydroxide NaOH, Mg(OH)₂, Al(OH)₃. Phát biểu đúng là",o:["tính base tăng dần từ NaOH đến Al(OH)₃","Al(OH)₃ chỉ có tính acid","Mg(OH)₂ mạnh hơn NaOH","tính base giảm dần từ NaOH đến Al(OH)₃"],a:3,e:"Trong chu kì 3, tính base của hydroxide giảm dần."},
+{q:"Nguyên tố X có 5 electron lớp ngoài cùng và thuộc chu kì 3. Oxide cao nhất của X là",o:["X₂O₃","XO₂","X₂O₅","XO₃"],a:2,e:"X thuộc nhóm VA, số oxi hóa cao nhất +5 ⇒ X₂O₅."},
+{q:"Một nguyên tố X có Z < 20, electron cuối cùng điền vào phân lớp 3p và có 2 electron độc thân. Số giá trị Z có thể có là",o:["1","2","3","4"],a:1,e:"3p² (Si, Z=14) và 3p⁴ (S, Z=16) đều có 2 electron độc thân ⇒ 2 giá trị."},
+{q:"Trong các cặp sau, cặp nào có tính chất hóa học gần giống nhau nhất?",o:["Na và Mg","O và S","Al và Si","Cl và Ar"],a:1,e:"O và S cùng nhóm VIA nên có cấu hình electron hóa trị tương tự."},
+{q:"X và Y là hai nguyên tố liên tiếp trong chu kì 3. Oxide cao nhất của X là oxide lưỡng tính, còn oxide cao nhất của Y là oxide acid. X và Y lần lượt là",o:["Mg, Al","Al, Si","Si, P","P, S"],a:1,e:"Al₂O₃ lưỡng tính, SiO₂ có tính acid."}
+];
+
+const tf = [
+{stem:"Nguyên tử X có Z = 15. Đánh giá các phát biểu sau:",s:[
+["Cấu hình electron của X là 1s²2s²2p⁶3s²3p³.",true],
+["X có 3 electron độc thân ở trạng thái cơ bản.",true],
+["X có tính kim loại mạnh hơn Si.",false],
+["Oxide cao nhất của X có công thức X₂O₅.",true]
+],e:"Z=15 là P. P có 3 electron độc thân, tính phi kim mạnh hơn Si và oxide cao nhất P₂O₅."},
+
+{stem:"Một nguyên tố X có hai đồng vị ⁶³X và ⁶⁵X, nguyên tử khối trung bình bằng 63,5. Đánh giá các phát biểu:",s:[
+["Tỉ lệ phần trăm của đồng vị ⁶⁵X là 25%.",true],
+["Tỉ lệ số nguyên tử ⁶³X : ⁶⁵X là 3 : 1.",true],
+["Nếu có 400 nguyên tử X thì có 100 nguyên tử ⁶⁵X.",true],
+["Nguyên tử khối trung bình 63,5 chứng tỏ mọi nguyên tử X đều có khối lượng 63,5 u.",false]
+],e:"63(1-x)+65x=63,5 ⇒ x=0,25. Giá trị 63,5 là trung bình theo tỉ lệ đồng vị, không phải khối lượng của từng nguyên tử."},
+
+{stem:"Xét các nguyên tố Na, Mg, Al, Si thuộc chu kì 3:",s:[
+["Bán kính nguyên tử giảm dần theo thứ tự Na > Mg > Al > Si.",true],
+["Độ âm điện tăng dần từ Na đến Si.",true],
+["Tính base của oxide cao nhất tăng dần từ Na₂O đến SiO₂.",false],
+["Al₂O₃ là oxide lưỡng tính, SiO₂ là oxide acid.",true]
+],e:"Từ trái sang phải: bán kính giảm, độ âm điện tăng, tính kim loại và tính base giảm; Al₂O₃ lưỡng tính, SiO₂ acid."},
+
+{stem:"Xét nguyên tử Y có cấu hình electron [Ne]3s²3p⁴:",s:[
+["Y thuộc chu kì 3, nhóm VIA (16).",true],
+["Y có 6 electron lớp ngoài cùng.",true],
+["Y có bán kính nguyên tử lớn hơn nguyên tử P.",false],
+["Hydride khí của Y có công thức H₂Y.",true]
+],e:"Y là S. Trong chu kì, bán kính giảm từ P sang S nên S nhỏ hơn P; hydride khí là H₂S."}
+];
+
+const shortQ = [
+{q:"Nguyên tử X có tổng số hạt proton, neutron và electron là 58; số hạt mang điện nhiều hơn số hạt không mang điện là 18. Nhập số khối A của X.",a:["39"],e:"2Z+N=58; 2Z-N=18 ⇒ Z=19, N=20 ⇒ A=39."},
+{q:"Nguyên tố X có hai đồng vị ³⁵X và ³⁷X, trong đó ³⁵X chiếm 75%. Nhập nguyên tử khối trung bình của X.",a:["35.5","35,5"],e:"Ā=35×0,75+37×0,25=35,5."},
+{q:"Hai nguyên tố X và Y liên tiếp trong chu kì 3. Tổng số electron hóa trị của X và Y bằng 9. Biết X đứng trước Y trong bảng tuần hoàn. Nhập số hiệu nguyên tử Z của Y.",a:["15"],e:"Các cặp liên tiếp có tổng electron hóa trị 9 là Si (4e) và P (5e). Y là P ⇒ Z=15."},
+{q:"Nguyên tử X có tổng số electron ở các phân lớp p bằng 10 và có 3 lớp electron. Nhập số hiệu nguyên tử Z của X.",a:["16"],e:"2p⁶ + 3p⁴ = 10 electron ở các phân lớp p; cấu hình [Ne]3s²3p⁴ ⇒ Z=16."},
+{q:"Một nguyên tố X thuộc chu kì 3. Trong oxide cao nhất X₂O₃, oxygen chiếm 47,06% khối lượng. Nhập số hiệu nguyên tử Z của X.",a:["13"],e:"48/(2M+48)=0,4706 ⇒ M≈27. Nguyên tố chu kì 3 có nguyên tử khối gần 27 là Al ⇒ Z=13."},
+{q:"Cho ba nguyên tố liên tiếp X, Y, Z trong chu kì 3, theo thứ tự tăng dần số hiệu nguyên tử. Biết oxide cao nhất của Y là oxide lưỡng tính. Nhập tổng số electron lớp ngoài cùng của X, Y và Z.",a:["9"],e:"Y là Al (oxide cao nhất Al₂O₃ lưỡng tính), nên X=Mg (2e ngoài cùng), Y=Al (3e), Z=Si (4e). Tổng = 9."}
+];
+
+function norm(v){
+  let s=(v||"").trim().toLowerCase().replace(/\s+/g,"").replace(/,/g,".").replace("−","-");
+  if(s==="") return "";
+  const n=Number(s);
+  return Number.isFinite(n)?String(n):s;
+}
+function render(){
+  const f=document.getElementById("quiz");
+  let h=`<section class="section"><h2>PHẦN I. TRẮC NGHIỆM NHIỀU LỰA CHỌN (4,5 điểm)</h2><div class="note">18 câu, mỗi câu 0,25 điểm.</div>`;
+  mcq.forEach((x,i)=>{
+    h+=`<div class="q" id="mBox${i}"><div class="qt">Câu ${i+1}. ${x.q}</div>`;
+    x.o.forEach((o,j)=>h+=`<label class="opt"><input type="radio" name="m${i}" value="${j}">${String.fromCharCode(65+j)}. ${o}</label>`);
+    h+=`<div class="explain" id="mExp${i}"><b>Đáp án:</b> ${String.fromCharCode(65+x.a)}. ${x.e}</div></div>`;
+  }); h+=`</section>`;
+
+  h+=`<section class="section"><h2>PHẦN II. TRẮC NGHIỆM ĐÚNG / SAI (4,0 điểm)</h2><div class="note">4 câu, mỗi câu 4 ý. Mỗi ý đúng 0,25 điểm.</div>`;
+  tf.forEach((x,i)=>{
+    h+=`<div class="q" id="tBox${i}"><div class="qt">Câu ${i+1}. ${x.stem}</div><div class="tf-grid"><div></div><div class="tf-h">Đúng</div><div class="tf-h">Sai</div>`;
+    x.s.forEach((s,j)=>h+=`<div class="tf-st">${String.fromCharCode(97+j)}) ${s[0]}</div><div class="tf-c"><input type="radio" name="t${i}_${j}" value="true"></div><div class="tf-c"><input type="radio" name="t${i}_${j}" value="false"></div>`);
+    h+=`</div><div class="explain" id="tExp${i}"><b>Giải thích:</b> ${x.e}</div></div>`;
+  }); h+=`</section>`;
+
+  h+=`<section class="section"><h2>PHẦN III. TRẢ LỜI NGẮN (1,5 điểm)</h2><div class="note">6 câu, mỗi câu 0,25 điểm. Chỉ nhập kết quả cuối cùng.</div>`;
+  shortQ.forEach((x,i)=>{
+    h+=`<div class="q" id="sBox${i}"><div class="qt">Câu ${i+1}. ${x.q}</div><input class="short" id="short${i}" placeholder="Nhập đáp án"><div class="explain" id="sExp${i}"><b>Đáp án:</b> ${x.a[0]}. ${x.e}</div></div>`;
+  }); h+=`</section>`;
+  f.innerHTML=h; loadSaved(); document.querySelectorAll("input").forEach(el=>el.addEventListener("change",save));
+}
+function save(){
+  const d={}; document.querySelectorAll('input[type="radio"]:checked').forEach(x=>d[x.name]=x.value);
+  shortQ.forEach((_,i)=>d["short"+i]=document.getElementById("short"+i).value);
+  localStorage.setItem("hoa10_midterm_harder",JSON.stringify(d));
+}
+function loadSaved(){
+  try{
+    const d=JSON.parse(localStorage.getItem("hoa10_midterm_harder")||"{}");
+    for(const [k,v] of Object.entries(d)){
+      if(k.startsWith("short")){const e=document.getElementById(k); if(e)e.value=v;}
+      else{const e=document.querySelector(`input[name="${k}"][value="${v}"]`); if(e)e.checked=true;}
+    }
+  }catch(e){}
+}
+function clearMarks(){document.querySelectorAll(".q").forEach(x=>x.classList.remove("correct","wrong"));document.querySelectorAll(".explain").forEach(x=>x.style.display="none")}
+function submitQuiz(){
+  clearMarks(); let p1=0,p2=0,p3=0,answered=0;
+  mcq.forEach((x,i)=>{const sel=document.querySelector(`input[name="m${i}"]:checked`),box=document.getElementById("mBox"+i);if(sel){answered++;if(+sel.value===x.a){p1+=.25;box.classList.add("correct")}else box.classList.add("wrong")}else box.classList.add("wrong");document.getElementById("mExp"+i).style.display="block"});
+  tf.forEach((x,i)=>{let n=0;x.s.forEach((s,j)=>{const sel=document.querySelector(`input[name="t${i}_${j}"]:checked`);if(sel){answered++;if((sel.value==="true")===s[1]){n++;p2+=.25}}});document.getElementById("tBox"+i).classList.add(n===4?"correct":"wrong");document.getElementById("tExp"+i).style.display="block"});
+  shortQ.forEach((x,i)=>{const v=document.getElementById("short"+i).value;if(v.trim())answered++;const ok=x.a.map(norm).includes(norm(v));if(ok){p3+=.25;document.getElementById("sBox"+i).classList.add("correct")}else document.getElementById("sBox"+i).classList.add("wrong");document.getElementById("sExp"+i).style.display="block"});
+  const total=p1+p2+p3; document.getElementById("s1").textContent=p1.toFixed(2);document.getElementById("s2").textContent=p2.toFixed(2);document.getElementById("s3").textContent=p3.toFixed(2);document.getElementById("score").textContent=total.toFixed(2);
+  let m=`Đã trả lời ${answered}/40 lệnh hỏi. `; if(total>=8.5)m+="Kết quả rất tốt.";else if(total>=7)m+="Kết quả khá.";else if(total>=5)m+="Đạt yêu cầu.";else m+="Cần củng cố thêm.";
+  document.getElementById("msg").textContent=m;document.getElementById("result").style.display="block";document.getElementById("result").scrollIntoView({behavior:"smooth",block:"center"});save();
+}
+function resetQuiz(){if(!confirm("Xóa toàn bộ đáp án và làm lại?"))return;localStorage.removeItem("hoa10_midterm_harder");document.getElementById("quiz").reset();shortQ.forEach((_,i)=>document.getElementById("short"+i).value="");clearMarks();document.getElementById("result").style.display="none";window.scrollTo({top:0,behavior:"smooth"})}
+render();
+</script>
+</body>
+</html>
